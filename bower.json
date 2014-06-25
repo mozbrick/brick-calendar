@@ -1,0 +1,27 @@
+{
+  "name": "x-calendar",
+  "version": "0.0.0",
+  "homepage": "https://github.com/dotch/x-calendar",
+  "authors": [
+    "mozilla"
+  ],
+  "description": "A calendar.",
+  "main": "src/element.html",
+  "keywords": [
+    "brick",
+    "webcomponents"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "brick-common": "*",
+    "platform": "Polymer/platform",
+    "PointerEvents": "Polymer/PointerEvents#~0.2.4"
+  }
+}
