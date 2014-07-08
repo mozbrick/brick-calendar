@@ -1421,31 +1421,6 @@
     });
     this.addEventListener("mousedown", this.ns.listeners.pointerdownDay);
 
-    // this.ns.listeners.pointermove = function(e) {
-    //   // TDOD: FIX THIS
-    //   // check point is in rect
-    //   if (!(e.touches && e.touches.length > 0)) {
-    //     return;
-    //   }
-
-    //   var xCalendar = e.currentTarget;
-    //   if (!xCalendar.ns.dragType) {
-    //     return;
-    //   }
-    //   console.log(e.touches);
-    //   var touch = e.touches[0];
-    //   var days = xCalendar.querySelectorAll(".day");
-    //   for (var i = 0; i < days.length; i++) {
-    //     var day = days[i];
-    //     if (_pointIsInRect(touch.pageX, touch.pageY, getRect(day))) {
-    //       _onDragMove(xCalendar, day);
-    //     } else {
-    //       day.removeAttribute("active");
-    //     }
-    //   }
-    // };
-    // this.addEventListener("mousemove", this.ns.listeners.pointermove);
-
     // mouse drag move, firing toggles on newly entered dates if needed
     this.ns.listeners.mouseoverDay = delegate(".day", function (e) {
       var xCalendar = e.currentTarget;
