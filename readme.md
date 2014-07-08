@@ -1,10 +1,10 @@
-# x-calendar
+# brick-calendar
 
-> A [Brick](https://github.com/mozilla/brick/) custom element starter-kit.
+> A [Brick](https://github.com/mozbrick/brick/) custom element starter-kit.
 
 ## Demo
 
-[Check it live!](http://dotch.github.io/x-calendar)
+[Check it live!](http://mozbrick.github.io/brick-calendar)
 
 ## Usage
 
@@ -23,7 +23,7 @@
 3. Start using it:
 
     ```html
-    <x-calendar></x-calendar>
+    <brick-calendar></brick-calendar>
     ```
 
 ## Options
@@ -69,12 +69,8 @@ While developing your component, there is a development server that will watch y
 To run the development server:
 
 * Run `gulp server`
-* Navigate to `http:localhost:3001`
+* Navigate to `http://localhost:3001`
 
 To simply build and lint your code, run `gulp build`.
 
 You can also push your code to GitHub Pages by running `gulp deploy`.
-
-## License
-
-[MIT License](http://opensource.org/licenses/MIT)

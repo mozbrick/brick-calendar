@@ -1,4 +1,7 @@
 (function () {
+  // used in mouse events
+  var LEFT_MOUSE_BTN = 0;
+
   // used during creating calendar elements
   var GET_DEFAULT_LABELS = function () {
     return {
@@ -155,7 +158,7 @@
   function addClass(el, c) {
     var list = el.className.trim().split(' ');
     c.trim().split(' ').forEach(function (name) {
-      if (list.indexOf(name) !== -1) {
+      if (list.indexOf(name) === -1) {
         list.push(name);
       }
     });
@@ -619,10 +622,10 @@
     self._viewDate = self._sanitizeViewDate(data.view, data.chosen);
     self._chosenRanges = self._sanitizeChosenRanges(data.chosen,
                                 data.view);
-    self._firstWeekdayNum = data.firstWeekdayNum || 0;
+    self._firstWeekdayNum = parseIntDec(data.firstWeekdayNum) || 0;
 
     // Note that self._el is the .calendar child div,
-    // NOT the x-calendar itself
+    // NOT the brick-calendar itself
     self._el = makeEl('div.calendar');
     self._labels = GET_DEFAULT_LABELS();
 
@@ -1064,7 +1067,7 @@
     if (this._renderRecursionFlag) {
       throw ("Error: customRenderFn causes recursive loop of "+
            "rendering calendar; make sure your custom rendering "+
-           "function doesn't modify attributes of the x-calendar that "+
+           "function doesn't modify attributes of the brick-calendar that "+
            "would require a re-render!");
     }
 
@@ -1087,7 +1090,7 @@
 
     the DOM element representing the calendar's contianer element
 
-    Note that this is the .calendar child div, NOT the x-calendar itself!
+    Note that this is the .calendar child div, NOT the brick-calendar itself!
 
     (Controls are separated in order to prevent the need for constant
      layout repositioning due to z-indexing)
@@ -1315,7 +1318,7 @@
     }
   });
 
-  /** _onDragStart: (x-calendar DOM, Date)
+  /** _onDragStart: (brick-calendar DOM, Date)
 
   when called, sets xCalendar to begin tracking a drag operation
 
@@ -1349,7 +1352,7 @@
     day.setAttribute("active", true);
   }
 
-  /** _onDragMove: (x-calendar DOM, Date)
+  /** _onDragMove: (brick-calendar DOM, Date)
 
   when called, handles toggling behavior for the given day if needed
   when drag-painted over
@@ -1395,11 +1398,10 @@
 
   /** _onDragEnd
 
-  when called, ends any drag operations of any x-calendars in the document
+  when called, ends any drag operations of any brick-calendars in the document
   **/
   function _onDragEnd() {
-    console.log("dragend");
-    var xCalendars = document.querySelectorAll("x-calendar");
+    var xCalendars = document.querySelectorAll("brick-calendar");
     for (var i = 0; i < xCalendars.length; i++) {
       var xCalendar = xCalendars[i];
       xCalendar.ns.dragType = null;
@@ -1408,7 +1410,7 @@
       xCalendar.removeAttribute("active");
     }
 
-    var days = document.querySelectorAll("x-calendar .day[active]");
+    var days = document.querySelectorAll("brick-calendar .day[active]");
     for (var j=0; j < days.length; j++) {
       days[j].removeAttribute("active");
     }
@@ -1422,7 +1424,7 @@
         rect.top <= y && y <= rect.bottom);
   }
 
-  // added on the body to delegate dragends to all x-calendars
+  // added on the body to delegate dragends to all brick-calendars
   var DOC_MOUSEUP_LISTENER = null;
 
   function delegate(selector, handler) {
@@ -1441,15 +1443,13 @@
     };
   }
 
-  var ElementPrototype = Object.create(HTMLElement.prototype);
+  var BrickCalendarElementPrototype = Object.create(HTMLElement.prototype);
 
-  ElementPrototype.createdCallback = function () {
+  BrickCalendarElementPrototype.createdCallback = function () {
 
   };
 
-  ElementPrototype.attachedCallback = function () {
-    // pointer events setup
-    // this.setAttribute("touch-action", "none");
+  BrickCalendarElementPrototype.attachedCallback = function () {
 
     this.ns = {};
 
@@ -1506,12 +1506,12 @@
         bubbles:true
       }));
     });
-    this.addEventListener("click", this.ns.listeners.clickNext);
+    this.addEventListener("click", this.ns.listeners.clickPrev);
 
     this.ns.listeners.pointerdownDay = delegate(".day", function (e) {
       // TDOD: FIX THIS
       // prevent firing on right click
-      if ((!e.touches) && e.button && e.button !== LEFT_MOUSE_BTN) {
+      if (e.button && e.button !== LEFT_MOUSE_BTN) {
         return;
       }
        // prevent dragging around existing selections
@@ -1599,14 +1599,14 @@
     this.addEventListener("datetoggleoff", this.ns.listeners.datetoggleoff);
   };
 
-  ElementPrototype.detachedCallback = function () {
+  BrickCalendarElementPrototype.detachedCallback = function () {
     // Cleanup EventListeners
     this.removeEventListener("click", this.ns.listeners.clickNext);
     this.removeEventListener("click", this.ns.listeners.clickPrev);
 
     // if there are no other canlender instances left,
     // remove the global listener.
-    if (document.querySelectorAll("x-calendar").length === 0) {
+    if (document.querySelectorAll("brick-calendar").length === 0) {
       if (DOC_MOUSEUP_LISTENER) {
         document.removeEventListener("mouseup", DOC_MOUSEUP_LISTENER);
         DOC_MOUSEUP_LISTENER = null;
@@ -1614,7 +1614,7 @@
     }
   };
 
-  ElementPrototype.attributeChangedCallback = function (attr, oldVal, newVal) {
+  BrickCalendarElementPrototype.attributeChangedCallback = function (attr, oldVal, newVal) {
     if (attr in attrs) {
       attrs[attr].call(this, oldVal, newVal);
     }
@@ -1628,21 +1628,21 @@
 
   // Custom methods
 
-  // updates the x-calendar display, recreating nodes if preserveNodes
+  // updates the brick-calendar display, recreating nodes if preserveNodes
   // if falsy or not given
-  ElementPrototype.render = function (preserveNodes) {
+  BrickCalendarElementPrototype.render = function (preserveNodes) {
     this.ns.calObj.render(preserveNodes);
   };
 
   // Go back one month by updating the view attribute of the calendar
-  ElementPrototype.prevMonth = function () {
+  BrickCalendarElementPrototype.prevMonth = function () {
     var calObj = this.ns.calObj;
     calObj.view = prevMonth(calObj.view);
   };
 
   // Advance one month forward by updating the view attribute
   // of the calendar
-  ElementPrototype.nextMonth = function () {
+  BrickCalendarElementPrototype.nextMonth = function () {
     var calObj = this.ns.calObj;
     calObj.view = nextMonth(calObj.view);
   };
@@ -1651,7 +1651,7 @@
   // chosen dates if append is falsy or not given, or adding to the
   // list of chosen dates, if append is truthy
   // also updates the chosen attribute of the calendar
-  ElementPrototype.toggleDateOn = function (newDateObj, append) {
+  BrickCalendarElementPrototype.toggleDateOn = function (newDateObj, append) {
     this.ns.calObj.addDate(newDateObj, append);
     // trigger setter
     this.chosen = this.chosen;
@@ -1659,7 +1659,7 @@
 
   // removes the given date from the chosen list
   // also updates the chosen attribute of the calendar
-  ElementPrototype.toggleDateOff = function (dateObj) {
+  BrickCalendarElementPrototype.toggleDateOff = function (dateObj) {
     this.ns.calObj.removeDate(dateObj);
     // trigger setter
     this.chosen = this.chosen;
@@ -1669,7 +1669,7 @@
   // 'appendIfAdd' specifies how the date is added to the list of
   // chosen dates if toggled on
   // also updates the chosen attribute of the calendar
-  ElementPrototype.toggleDate = function (dateObj, appendIfAdd) {
+  BrickCalendarElementPrototype.toggleDate = function (dateObj, appendIfAdd) {
     if (this.ns.calObj.hasChosenDate(dateObj)) {
       this.toggleDateOff(dateObj);
     } else {
@@ -1680,15 +1680,15 @@
   // returns whether or not the given date is in the visible
   // calendar display, optionally ignoring dates outside of the
   // month span
-  ElementPrototype.hasVisibleDate = function (dateObj, excludeBadMonths) {
+  BrickCalendarElementPrototype.hasVisibleDate = function (dateObj, excludeBadMonths) {
     return this.ns.calObj.hasVisibleDate(dateObj,
                          excludeBadMonths);
   };
 
   // Property handlers
 
-  Object.defineProperties(ElementPrototype, {
-    // handles if the x-calendar should display navigation controls or
+  Object.defineProperties(BrickCalendarElementPrototype, {
+    // handles if the brick-calendar should display navigation controls or
     // not
     // Boolean
     'controls': {
@@ -1700,7 +1700,7 @@
         }
       }
     },
-    // handles if the x-calendar should allow multiple dates to be
+    // handles if the brick-calendar should allow multiple dates to be
     // chosen at once
     // Boolean
     'multiple': {
@@ -1716,7 +1716,7 @@
         this.ns.calObj.multiple = !!newVal;
       }
     },
-    // handles how many months the x-calendar displays at once
+    // handles how many months the brick-calendar displays at once
     'span': {
       get : function () {
         return this.ns.calObj.span;
@@ -1726,7 +1726,7 @@
         this.setAttribute("span",newVal);
       }
     },
-    // handles where the x-calendar's display is focused
+    // handles where the brick-calendar's display is focused
     'view': {
       get : function () {
         return this.ns.calObj.view;
@@ -1738,7 +1738,7 @@
         }
       }
     },
-    // handles which dates are marked as chosen in the x-calendar
+    // handles which dates are marked as chosen in the brick-calendar
     // setter can take a parseable string, a singular date, or a range
     // of dates/dateranges
     'chosen': {
@@ -1791,11 +1791,11 @@
         this.setAttribute("first-weekday-num", newVal);
       }
     },
-    // handles if the x-calendar allows dates to be chosen or not
+    // handles if the brick-calendar allows dates to be chosen or not
     // ie: if set, overrides default chosen-toggling behavior of the UI
     'noToggle': {
       get : function () {
-        return this.getAttribute("notoggle");
+        return this.hasAttribute("notoggle");
       },
       set : function (newVal) {
         if (newVal) {
@@ -1882,9 +1882,8 @@
   });
 
   // Register the element
-
-  window.XCalendar = document.registerElement('x-calendar', {
-    prototype: ElementPrototype
+  window.BrickCalendar = document.registerElement('brick-calendar', {
+    prototype: BrickCalendarElementPrototype
   });
 
 })();

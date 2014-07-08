@@ -11,12 +11,12 @@ before(function (done) {
 window.addEventListener('WebComponentsReady', function() {
 
   // Add the HTMLImport for the custom element.
-  document.head.innerHTML += '<link rel="import" id="el" href="/base/src/element.html">';
+  document.head.innerHTML += '<link rel="import" id="el" href="/base/src/brick-calendar.html">';
 
   document.querySelector('#el').addEventListener('load', function() {
 
     // Create the custom element.
-    var customElement = document.createElement('x-calendar');
+    var customElement = document.createElement('brick-calendar');
     // customElement.setAttribute('attribute-value', attrbute);
 
     // Add the custom element to the page.
@@ -28,10 +28,10 @@ window.addEventListener('WebComponentsReady', function() {
   });
 });
 
-describe("the x-calendar", function(){
+describe("the brick-calendar", function(){
 
   it("should be attached to the DOM", function(){
-    expect(document.querySelector("x-calendar")).not.to.be.null;
+    expect(document.querySelector("brick-calendar")).not.to.be.null;
   });
 
 });

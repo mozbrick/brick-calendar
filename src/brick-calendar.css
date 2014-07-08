@@ -1,4 +1,4 @@
-x-calendar {
+brick-calendar {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -17,20 +17,20 @@ x-calendar {
   text-align: center;
   overflow: hidden;
 }
-x-calendar,
-x-calendar * {
+brick-calendar,
+brick-calendar * {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-x-calendar .calendar {
+brick-calendar .calendar {
   position: relative;
   display: inline-block;
   overflow: hidden;
   width: 100%;
   height: 100%;
 }
-x-calendar .month {
+brick-calendar .month {
   display: inline-block;
   margin: 0;
   padding: 0;
@@ -39,68 +39,68 @@ x-calendar .month {
   width: 224px;
   max-width: 100%;
 }
-x-calendar .week,
-x-calendar .weekday-labels {
+brick-calendar .week,
+brick-calendar .weekday-labels {
   margin: 1px 0;
   overflow: visible;
   width: 100%;
   white-space: nowrap;
 }
-x-calendar .day,
-x-calendar .prev,
-x-calendar .next,
-x-calendar .weekday-label {
+brick-calendar .day,
+brick-calendar .prev,
+brick-calendar .next,
+brick-calendar .weekday-label {
   display: inline-block;
   width: 32px;
 }
-x-calendar .month-label,
-x-calendar .weekday-labels,
-x-calendar .week,
-x-calendar .prev,
-x-calendar .next {
+brick-calendar .month-label,
+brick-calendar .weekday-labels,
+brick-calendar .week,
+brick-calendar .prev,
+brick-calendar .next {
   height: 2em;
   line-height: 2em;
 }
-x-calendar .weekday-label {
+brick-calendar .weekday-label {
   opacity: 0.8;
   font-size: 0.8em;
 }
-x-calendar .weekday-label,
-x-calendar .day {
+brick-calendar .weekday-label,
+brick-calendar .day {
   height: 100%;
   line-height: inherit;
   margin: 0 auto;
 }
-x-calendar .month-label {
+brick-calendar .month-label {
   width: 100%;
 }
-x-calendar .day {
+brick-calendar .day {
   position: relative;
   white-space: nowrap;
 }
-x-calendar .badmonth {
+brick-calendar .badmonth {
   opacity: 0.5;
 }
-x-calendar:not([controls]) .controls {
+brick-calendar:not([controls]) .controls {
   display: none !important;
 }
-x-calendar[controls] .controls {
+brick-calendar[controls] .controls {
   display: block;
 }
-x-calendar .prev,
-x-calendar .next {
+brick-calendar .prev,
+brick-calendar .next {
   position: absolute;
   top: 0px;
   max-width: 3em;
 }
-x-calendar .prev {
+brick-calendar .prev {
   left: 0px;
 }
-x-calendar .next {
+brick-calendar .next {
   right: 0px;
 }
-x-calendar:not([active]) .day:hover,
-x-calendar:not([active]) .prev:hover,
-x-calendar:not([active]) .next:hover {
+brick-calendar:not([active]) .day:hover,
+brick-calendar:not([active]) .prev:hover,
+brick-calendar:not([active]) .next:hover {
   cursor: pointer;
 }
