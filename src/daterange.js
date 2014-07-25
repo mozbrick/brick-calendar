@@ -16,7 +16,7 @@ var DateRange = (function () {
 
   var test = /^\d{4}-\d{2}-\d{2}$/;
   function isValid(s) {
-    return test.test(s);
+    return typeof s === 'string' && test.test(s);
   }
 
   function pad2(n) {
@@ -116,8 +116,49 @@ var DateRange = (function () {
     }
   }
 
-  function DateRange(o) {
+  function DateRange(o, d2) {
     this.obj = [];
+
+    // check to see if supplied object is a valid internal representation
+    if (o instanceof Array) {
+      var valid = true;
+      for (var i = 0; i < o.length; i++) {
+        var d = o[i];
+        if (d instanceof Array) {
+          if (d.length !== 2) {
+            valid = false;
+          }
+          if (!(isValid(d) && isValid(d))) {
+            valid = false;
+          }
+        } else {
+          if (!isValid(d)) {
+            valid = false;
+          }
+        }
+      }
+      if (valid) {
+        this.obj = o;
+      }
+    } else {
+      // check to see if single date or range was supplied
+      if (d2) {
+        if (o instanceof Date && d2 instanceof Date) {
+          this.obj = [[iso(o), iso(d2)]];
+        } else {
+          if (isValid(o) && isValid(d2)) {
+            this.obj = [[o, d2]];
+          }
+        }
+      } else {
+        if (o instanceof Date) {
+          this.obj = [iso(o)];
+        }
+        if (isValid(o)) {
+          this.obj = [o];
+        }
+      }
+    }
   }
 
   DateRange.prototype = {
