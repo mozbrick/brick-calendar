@@ -1,15 +1,17 @@
 {
   "name": "brick-common",
   "description": "Brick Common files",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "keywords": [
     "brick",
     "custom",
-    "elements",
-    "x-tag"
+    "elements"
   ],
-  "main":[
+  "main": [
     "styles/mixins.styl",
     "styles/params.styl"
-  ]
+  ],
+  "dependencies": {
+    "font-awesome": "~4.1.0"
+  }
 }
