@@ -1,4 +1,9 @@
+/* global Platform */
+
 (function () {
+
+  var currentScript = document._currentScript || document.currentScript;
+
   // used in mouse events
   var LEFT_MOUSE_BTN = 0;
 
@@ -1348,10 +1353,21 @@
 
   BrickCalendarElementPrototype.attachedCallback = function () {
 
+    var importDoc = currentScript.ownerDocument;
+    var template = importDoc.querySelector('template');
 
+    // fix styling for polyfill
+    if (Platform.ShadowCSS) {
+      var styles = template.content.querySelectorAll('style');
+      for (var i = 0; i < styles.length; i++) {
+        var style = styles[i];
+        var cssText = Platform.ShadowCSS.shimStyle(style, 'brick-calendar');
+        Platform.ShadowCSS.addCssToDocument(cssText);
+        style.remove();
+      }
+    }
 
-    this.innerHTML = "";
-
+    // add calendar before inserting the template
     var chosenRange = this.getAttribute("chosen");
     this.ns.calObj = new Calendar({
       span: this.getAttribute("span"),
@@ -1362,11 +1378,9 @@
     });
     this.appendChild(this.ns.calObj.el);
 
-
     if (this.hasAttribute("controls")) {
       this.controls = true;
     }
-
 
     this.ns.calControls = null;
 
@@ -1470,6 +1484,11 @@
       xCalendar.toggleDateOn(e.detail.date, xCalendar.multiple);
     };
     this.addEventListener("datetoggleoff", this.ns.listeners.datetoggleoff);
+
+    // create shadowRoot and append template to it.
+    this.shadowRoot = this.createShadowRoot();
+    this.shadowRoot.appendChild(template.content.cloneNode(true));
+
   };
 
   BrickCalendarElementPrototype.detachedCallback = function () {
@@ -1570,6 +1589,7 @@
           this.setAttribute("controls", "");
           this.ns.calControls = makeControls(this.ns.calObj.labels);
           this.appendChild(this.ns.calControls);
+          console.log("this",this, this.ns.calControls);
         }
       }
     },
