@@ -1589,7 +1589,6 @@
           this.setAttribute("controls", "");
           this.ns.calControls = makeControls(this.ns.calObj.labels);
           this.appendChild(this.ns.calControls);
-          console.log("this",this, this.ns.calControls);
         }
       }
     },
