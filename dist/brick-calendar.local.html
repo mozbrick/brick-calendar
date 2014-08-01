@@ -21,15 +21,15 @@
   text-align: center;
   overflow: hidden;
 }
-:host:not([controls]) ::content .controls {
+:host(:not([controls])) ::content .controls {
   display: none !important;
 }
 :host([controls]) ::content .controls {
   display: block;
 }
-:host:not([active]) ::content .day:hover,
-:host:not([active]) ::content .prev:hover,
-:host:not([active]) ::content .next:hover {
+:host(:not([active])) ::content .day:hover,
+:host(:not([active])) ::content .prev:hover,
+:host(:not([active])) ::content .next:hover {
   cursor: pointer;
 }
 :host ::content {
