@@ -6,8 +6,8 @@ $oneEmPxVal = 16px;
 $dayMarginPx = 1px;
 
 :host {
-  box-sizing(border-box);
-  nohighlight();
+  box-sizing: border-box;
+  user-select: none;
   position: relative;
   display: inline-block;
   margin: 0;
@@ -42,7 +42,7 @@ $dayMarginPx = 1px;
   }
 
   ::content {
-    box-sizing(border-box);
+    box-sizing: border-box;
 
     .calendar{
       position: relative;

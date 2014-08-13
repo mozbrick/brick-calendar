@@ -9,6 +9,7 @@ var ghpages = require('gulp-gh-pages');
 var gulp = require('gulp');
 var helptext = require('gulp-helptext');
 var jshint = require('gulp-jshint');
+var prefix = require('gulp-autoprefixer');
 var rename = require('gulp-rename');
 var rm = require('gulp-rm');
 var stylus = require('gulp-stylus');
@@ -35,12 +36,14 @@ gulp.task('styles', function() {
   return gulp.src(paths.stylesheets)
     .pipe(stylus())
     .pipe(concat('brick-calendar.css'))
+    .pipe(prefix("last 2 versions", "Firefox >= 18", "ie >= 10"))
     .pipe(gulp.dest('src'));
 });
 
 gulp.task('themes', function() {
   return gulp.src(paths.themes)
     .pipe(stylus())
+    .pipe(prefix("last 2 versions", "Firefox >= 18", "ie >= 10"))
     .pipe(gulp.dest('src/themes'));
 });
 
