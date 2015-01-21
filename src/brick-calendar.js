@@ -1350,7 +1350,7 @@
   };
 
   BrickCalendarElementPrototype.attachedCallback = function() {
-
+    var brickCalendarElement = this;
     var importDoc = currentScript.ownerDocument;
     var template = importDoc.querySelector('#brick-calendar-template');
 
@@ -1399,21 +1399,29 @@
     // EventListeners
     this.ns.listeners = {};
 
+    this.ns.raiseNextMonthEvent = function(xCalendar) {
+        xCalendar.nextMonth();
+        xCalendar.dispatchEvent(new CustomEvent("nextmonth", {
+          bubbles: true
+      }));
+    }
+      
+    this.ns.raisePrevMonthEvent = function(xCalendar) {
+        xCalendar.prevMonth();
+        xCalendar.dispatchEvent(new CustomEvent("prevmonth", {
+          bubbles: true
+        }));
+    }
+      
     this.ns.listeners.clickNext = delegate(".next", function(e) {
       var xCalendar = e.currentTarget;
-      xCalendar.nextMonth();
-      xCalendar.dispatchEvent(new CustomEvent("nextmonth", {
-        bubbles: true
-      }));
+      xCalendar.ns.raiseNextMonthEvent(xCalendar);
     });
     this.addEventListener("click", this.ns.listeners.clickNext);
 
     this.ns.listeners.clickPrev = delegate(".prev", function(e) {
       var xCalendar = e.currentTarget;
-      xCalendar.prevMonth();
-      xCalendar.dispatchEvent(new CustomEvent("prevmonth", {
-        bubbles: true
-      }));
+        xCalendar.ns.raisePrevMonthEvent(xCalendar);
     });
     this.addEventListener("click", this.ns.listeners.clickPrev);
 
@@ -1460,7 +1468,13 @@
       var day = this;
       var isoDate = day.getAttribute("data-date");
       var dateObj = parseSingleDate(isoDate);
-
+      if (day.className.contains("badmonth")) {
+          if (dateObj.getDate() < 7) {
+              xCalendar.ns.raiseNextMonthEvent(xCalendar);
+          } else if (dateObj.getDate() > 20) {
+              xCalendar.ns.raisePrevMonthEvent(xCalendar);
+          }
+      }
       xCalendar.dispatchEvent(new CustomEvent("datetap", {
         detail: {
           date: dateObj,
