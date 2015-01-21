@@ -1350,7 +1350,6 @@
   };
 
   BrickCalendarElementPrototype.attachedCallback = function() {
-    var brickCalendarElement = this;
     var importDoc = currentScript.ownerDocument;
     var template = importDoc.querySelector('#brick-calendar-template');
 
@@ -1404,14 +1403,14 @@
         xCalendar.dispatchEvent(new CustomEvent("nextmonth", {
           bubbles: true
       }));
-    }
+    };
       
     this.ns.raisePrevMonthEvent = function(xCalendar) {
         xCalendar.prevMonth();
         xCalendar.dispatchEvent(new CustomEvent("prevmonth", {
           bubbles: true
         }));
-    }
+    };
       
     this.ns.listeners.clickNext = delegate(".next", function(e) {
       var xCalendar = e.currentTarget;

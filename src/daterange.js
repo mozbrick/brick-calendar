@@ -72,7 +72,6 @@ var DateRange = (function () {
     for (var i = 0; i < o.length - 1; i++) {
       var curr = o[i];
       var next = o[i + 1];
-      var delta;
       var merged = false;
       if (curr instanceof Array) {
         if (next instanceof Array) {
